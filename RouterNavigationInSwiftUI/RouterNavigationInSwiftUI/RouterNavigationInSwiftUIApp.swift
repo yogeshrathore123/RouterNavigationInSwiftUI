@@ -9,9 +9,23 @@ import SwiftUI
 
 @main
 struct RouterNavigationInSwiftUIApp: App {
+    
+    @ObservedObject var router = Router()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack(path: $router.navPath) {
+                if router.rootFlow == .a {
+                    AView()
+                        .navigationDestination(for: Router.Destination.self) { destination in
+                            router.destination(for: destination)
+                        }
+                } else {
+                    EView()
+                }
+                
+            }
+            .environmentObject(router)
         }
     }
 }
